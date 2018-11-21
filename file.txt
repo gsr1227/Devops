@@ -1,0 +1,86 @@
+hive> create database mydb;
+
+  when a database is created, in warehouse location, with name database and extension ".db" , one directory will be created.
+
+ How to select database:
+
+hive> use mydb;
+
+hive> create table test1(line string);
+
+  under mydb.db directory, test1 table directory will be created.
+
+ /user/hive/warehouse/mydb.db/test1.
+
+[cloudera@quickstart ~]$ ls file*
+file1  file2  file3
+[cloudera@quickstart ~]$ cat file1
+aaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+[cloudera@quickstart ~]$ cat file2
+bbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbb
+[cloudera@quickstart ~]$ cat file3
+cccccccccccccccccccc
+ccccccccccccccccccc
+ccccccccccccc
+[cloudera@quickstart ~]$
+
+hive> use default;
+hive> load data local inpath 'file1'
+      into table samp1;
+-- when you  load file into table,
+    the file will be copied into table's backend directory.
+
+   in hdfs,
+  /user/hive/warehouse/samp1/file1
+
+hive> load data local inpath 'file2'
+   into table samp1;
+
+  now table directory has two files,
+     file1 and file2.
+hive> select * from samp1;
+o/p:
+aaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+bbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbb
+
+
+-- hive will read all rows of all files of
+   table directory.
+
+another way of loading file into table.
+
+$ hadoop fs -copyFromLocal file3
+          /user/hive/warehouse/samp1
+
+
+
+hive> select * from samp1;
+OK
+aaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+bbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbb
+cccccccccccccccccccc
+ccccccccccccccccccc
+ccccccccccccc
+
+hive> use mydb;
+hive> show tables;
+test1
+hive> load data local inpath 'file1' into table test1;
+hive>
+in hdfs,
+ /user/hive/warehouse/mydb.db/test1/file1
