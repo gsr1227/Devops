@@ -1,0 +1,135 @@
+arning Linux is very easy, Just follow the sequence below. 
+ 
+======>> Basics <<================================ 
+ 
+1. Introduction to Linux -- http://bit.ly/Introcudtion_to_Linux 
+2. Linux Architecture -- http://bit.ly/Linux_Architecture 
+3. Windows Vs Linux Comparision --http://bit.ly/Windows_Vs_Linux 
+4. Bash Shell features -- http://bit.ly/bash_shell 
+5. Linux Directory Structure --http://bit.ly/Linux_Directory_structure 
+6. Linux Boot Process Detailed explanation -http://bit.ly/LinuXboot_process 
+7. Basic and Common Commands -http://bit.ly/Basicommands 
+8. All Linux Commands with there description -http://bit.ly/Linux_commands 
+ 
+==============>> System Administration Topics <<============== 
+9.   Linux Text Editors - http://bit.ly/Text_Editors 
+10. Linux Operating System Installation -http://bit.ly/Linux_OS_Installation 
+11. User Profile Management -http://bit.ly/User_Profile_management 
+12. User Administration (User Creation, Modification and deletion) - http://bit.ly/User_Administration 
+13. Access Control List - http://bit.ly/Linux_acl 
+14. Head, Sort, Tail, Uniq, Paste, Cut, Tr, Sed and diff commands with examples -http://bit.ly/String_commands 
+15. Soft Link Vs Hard Link - http://bit.ly/Soft_vs_hard_link 
+16. Search related commands Grep, find and locate -http://bit.ly/search_commands 
+17. Task Automation using crontab and at -http://bit.ly/Linux_crontab 
+18. File system and Creating Standard partitions -http://bit.ly/Creating_partition 
+19. Logical Volume Manager (LVM - Part1) -http://bit.ly/Linux_LVM 
+20. Logical Volume Manager (LVM - Part2) -http://bit.ly/Linux_LVM2 
+21. Disk quota management - http://bit.ly/Disk_quota 
+22. RPM / YUM - http://bit.ly/Linux_YUM 
+23. All RAID Levels explained -http://bit.ly/RAID_Levels 
+24. Creating and Managing Software RAID -http://bit.ly/Manage_RAID 
+ 
+============== >>> Advanced System Administration <<< ============== 
+25. Neworking installing and configuring the Network Card - http://bit.ly/Linux_networking 
+26. Remote Server Management (VNC Server) -http://bit.ly/Remote_server 
+27. Network File System (NFS) - http://bit.ly/TT_NFS 
+28. Samba Server (SMB) - http://bit.ly/sambaServer 
+29. File Transfer Protocol (FTP) -http://bit.ly/FileServerFTP 
+30. Web Server / Apache (HTTPD) -http://bit.ly/WEBServer 
+31. Mail Server configuration (SMTP) -http://bit.ly/1QopUJy 
+32. DHCP Server  installation and configuration -http://bit.ly/1HLeHQu 
+33. DNS Server installation and configuration -http://bit.ly/1H2F7Nw 
+34. NIS Server - http://bit.ly/1NxgsgE 
+35. PAM - http://bit.ly/1MPioAB 
+36. Backup and Restore - http://bit.ly/1PtQl0c 
+37. SQUID Proxy Server - http://bit.ly/1SQUNoo 
+38. VNC Server - Centos - http://bit.ly/1WThXAf 
+39. Recovering ROOT Password - http://bit.ly/1kW6tuv
+40. Netapp MPIO installation and configuration in Linux - http://bit.ly/1O9nsTL 
+41. Local YUM Server configuration -http://bit.ly/1lpfjBm 
+42. Kick Start Server installation and configuration -http://bit.ly/1SQVfmw 
+43. Process Management - http://bit.ly/1kW70fO 
+ 
+============>>>> InterView Questions and Answers <<<<============ 
+Interview questions and answers - PArt1-http://bit.ly/1NRnpMv 
+Interview questions and answers - PArt2 -http://bit.ly/1NtRXp9 
+Interview questions and answers - PAr3 -http://bit.ly/1Sr7juF 
+ 
+============ >>>> File system error resolution <<< ========== 
+mount: Arugument list too Long -http://bit.ly/1Lg4qqm 
+  
+============= >>> A Book for Linux <<< =========== 
+Book Linux Hands on Guide - http://bit.ly/1MeDyuH
+
+-- 
+Thanks & Regards 
+Pradeep kumar
+09036543453
+
+From: pradeep kumar <pradeepcnp123@gmail.com>
+Sent: Monday, November 16, 2015 5:03:21 PM
+To: pradeepkuma4422; pradeep-atp@outlook.com; pradeep c
+Subject: Learning Linux is very easy, Just follow the sequence below
+ 
+Learning Linux is very easy, Just follow the sequence below. 
+ 
+======>> Basics <<================================ 
+ 
+1. Introduction to Linux -- http://bit.ly/Introcudtion_to_Linux 
+2. Linux Architecture -- http://bit.ly/Linux_Architecture 
+3. Windows Vs Linux Comparision --http://bit.ly/Windows_Vs_Linux 
+4. Bash Shell features -- http://bit.ly/bash_shell 
+5. Linux Directory Structure --http://bit.ly/Linux_Directory_structure 
+6. Linux Boot Process Detailed explanation -http://bit.ly/LinuXboot_process 
+7. Basic and Common Commands -http://bit.ly/Basicommands 
+8. All Linux Commands with there description -http://bit.ly/Linux_commands 
+ 
+==============>> System Administration Topics <<============== 
+9.   Linux Text Editors - http://bit.ly/Text_Editors 
+10. Linux Operating System Installation -http://bit.ly/Linux_OS_Installation 
+11. User Profile Management -http://bit.ly/User_Profile_management 
+12. User Administration (User Creation, Modification and deletion) - http://bit.ly/User_Administration 
+13. Access Control List - http://bit.ly/Linux_acl 
+14. Head, Sort, Tail, Uniq, Paste, Cut, Tr, Sed and diff commands with examples -http://bit.ly/String_commands 
+15. Soft Link Vs Hard Link - http://bit.ly/Soft_vs_hard_link 
+16. Search related commands Grep, find and locate -http://bit.ly/search_commands 
+17. Task Automation using crontab and at -http://bit.ly/Linux_crontab 
+18. File system and Creating Standard partitions -http://bit.ly/Creating_partition 
+19. Logical Volume Manager (LVM - Part1) -http://bit.ly/Linux_LVM 
+20. Logical Volume Manager (LVM - Part2) -http://bit.ly/Linux_LVM2 
+21. Disk quota management - http://bit.ly/Disk_quota 
+22. RPM / YUM - http://bit.ly/Linux_YUM 
+23. All RAID Levels explained -http://bit.ly/RAID_Levels 
+24. Creating and Managing Software RAID -http://bit.ly/Manage_RAID 
+ 
+============== >>> Advanced System Administration <<< ============== 
+25. Neworking installing and configuring the Network Card - http://bit.ly/Linux_networking 
+26. Remote Server Management (VNC Server) -http://bit.ly/Remote_server 
+27. Network File System (NFS) - http://bit.ly/TT_NFS 
+28. Samba Server (SMB) - http://bit.ly/sambaServer 
+29. File Transfer Protocol (FTP) -http://bit.ly/FileServerFTP 
+30. Web Server / Apache (HTTPD) -http://bit.ly/WEBServer 
+31. Mail Server configuration (SMTP) -http://bit.ly/1QopUJy 
+32. DHCP Server  installation and configuration -http://bit.ly/1HLeHQu 
+33. DNS Server installation and configuration -http://bit.ly/1H2F7Nw 
+34. NIS Server - http://bit.ly/1NxgsgE 
+35. PAM - http://bit.ly/1MPioAB 
+36. Backup and Restore - http://bit.ly/1PtQl0c 
+37. SQUID Proxy Server - http://bit.ly/1SQUNoo 
+38. VNC Server - Centos - http://bit.ly/1WThXAf 
+39. Recovering ROOT Password - http://bit.ly/1kW6tuv
+40. Netapp MPIO installation and configuration in Linux - http://bit.ly/1O9nsTL 
+41. Local YUM Server configuration -http://bit.ly/1lpfjBm 
+42. Kick Start Server installation and configuration -http://bit.ly/1SQVfmw 
+43. Process Management - http://bit.ly/1kW70fO 
+ 
+============>>>> InterView Questions and Answers <<<<============ 
+Interview questions and answers - PArt1-http://bit.ly/1NRnpMv 
+Interview questions and answers - PArt2 -http://bit.ly/1NtRXp9 
+Interview questions and answers - PAr3 -http://bit.ly/1Sr7juF 
+ 
+============ >>>> File system error resolution <<< ========== 
+mount: Arugument list too Long -http://bit.ly/1Lg4qqm 
+  
+============= >>> A Book for Linux <<< =========== 
+Book Linux Hands on Guide - http://bit.ly/1MeDyuH

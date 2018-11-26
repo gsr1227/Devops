@@ -1,1 +1,321 @@
 
+DECLARE
+   g_conc_request_id   NUMBER := fnd_global.conc_request_id;
+   g_user_id           NUMBER := fnd_global.user_id;
+   g_login_id          NUMBER := fnd_global.login_id;
+   g_sysdate           DATE   := SYSDATE;
+   x_errbuf  VARCHAR2(20);
+   x_retcode NUMBER;
+
+   PROCEDURE main_proc 
+  (
+      x_errbuf    OUT NOCOPY   VARCHAR2,
+      x_retcode   OUT NOCOPY   NUMBER
+   ) 
+   IS
+      l_org_id              NUMBER;
+      l_err_msg             VARCHAR2 (5000);
+      l_check_id            NUMBER;
+      l_check_number        VARCHAR2 (100);
+      l_success_count       NUMBER          := 0;
+      l_success_err_count   NUMBER          := 0;
+      l_fail_count          NUMBER          := 0;
+      l_fail_err_count      NUMBER          := 0;
+      l_total_count         NUMBER          := 0;
+      l_total_err_count     NUMBER          := 0;
+	  
+	  CURSOR c_data
+      IS
+         SELECT   xrhs.rowid,xrhs.data_file_name, xrhs.BENIFICIARY_ACCT_NUM,
+                  xrhs.transaction_type, xrhs.CUSTOMER_REF_NUM cheque_number, xrhs.utr_no,
+                  xrhs.ft_number, xrhs.transaction_status,xrhs.reject_reason,
+                  xrhs.instrument_amount,
+                  xrhs.micr_code,erp_update_status ,
+--                  REGEXP_REPLACE (annexture_text_link_ref,
+--                                  '[[:digit:]]'
+--                                 ) circle
+                  --substr(data_file_name,2,4) circle
+				  xrhs.BENIFICIARY_CODE as vendor_no
+             FROM xxindus_hdfc_reverse_stg_new xrhs
+            WHERE 1 = 1
+            and xrhs.erp_update_status <> 'Y'
+            and xrhs.transaction_status ='E'
+         AND TRUNC (xrhs.creation_date) >= '01-NOV-2018'
+		 -- and xrhs.CUSTOMER_REF_NUM=20652211
+         ORDER BY xrhs.creation_date, xrhs.data_file_name;
+   BEGIN
+      FOR c1 IN c_data
+      LOOP
+       /*  l_org_id := NULL;
+
+         BEGIN
+               SELECT  meaning into l_org_id
+                  FROM fnd_lookups fu
+                WHERE lookup_type IN
+              ('INDUS_HDFC_BILLDSK_CL_CODE_NEW', 'XXINDUS_HDFC_CLIENT_CODE_NEW')
+              AND SUBSTR (lookup_code, 8, 4) =c1.circle;
+            EXCEPTION
+               WHEN NO_DATA_FOUND
+               THEN
+                  l_org_id := NULL;
+                  l_err_msg :=
+                     'Circle ' || c1.circle
+                     || ' code is not defined in the system';
+                  fnd_file.put_line (fnd_file.LOG, l_err_msg);
+                  x_errbuf := l_err_msg;
+                  x_retcode := 1;
+               WHEN OTHERS
+               THEN
+                  l_org_id := NULL;
+                  l_err_msg :=
+                        'Error occured while fetching org_id for circle '
+                     || c1.circle
+                     || ': '
+                     || SQLERRM;
+                  fnd_file.put_line (fnd_file.LOG, l_err_msg);
+                  x_errbuf := l_err_msg;
+                  x_retcode := 1;
+            END; */
+
+        IF c1.transaction_status = 'E'
+       --IF c1.reject_reason ='E'
+         THEN
+
+
+            BEGIN
+               SELECT aca.check_id, aca.check_number
+                 INTO l_check_id, l_check_number
+                 FROM ap_checks_all aca, hr_operating_units hou,apps.ap_suppliers asu
+                WHERE 1 = 1
+                  AND aca.org_id = hou.organization_id
+                  AND aca.check_number = c1.cheque_number
+				  AND aca.vendor_id = asu.vendor_id
+                --  AND hou.ORGANIZATION_ID = l_org_id
+				and asu.segment1=c1.vendor_no -----------21/11/2018
+                  AND aca.amount = c1.instrument_amount;
+				 
+				  
+            EXCEPTION
+               WHEN NO_DATA_FOUND
+               THEN
+                  l_err_msg :=
+                        'check_number '
+                     || c1.cheque_number
+                     || ' is not defined in the system';
+                  fnd_file.put_line (fnd_file.LOG, l_err_msg );
+				   DBMS_OUTPUT.PUT_LINE(l_err_msg);
+                  x_errbuf := l_err_msg;
+                  x_retcode := 1;
+               WHEN OTHERS
+               THEN
+                  l_err_msg :=
+                        'Error occured while fetching check id  '
+                     || c1.cheque_number
+                     || ': '
+                     || SQLERRM;
+                  fnd_file.put_line (fnd_file.LOG, l_err_msg);
+				  DBMS_OUTPUT.PUT_LINE(l_err_msg);
+                 x_errbuf := l_err_msg;
+                  x_retcode := 1;
+            END;
+
+            IF  --   l_org_id IS NOT NULL AND
+                l_check_id IS NOT NULL
+               AND c1.transaction_type IN ('N', 'C', 'I', 'D')
+            THEN
+               UPDATE ap_checks_all
+                  SET attribute4 = c1.ft_number,
+                      attribute5 = trunc(sysdate),
+                      last_updated_by = g_user_id,
+                      last_update_date = g_sysdate,
+                      last_update_login = g_login_id
+                WHERE check_id = l_check_id;
+            ELSIF   --  l_org_id IS NOT NULL AND
+                   l_check_id IS NOT NULL
+                  AND c1.transaction_type IN ('R')
+            THEN
+               UPDATE ap_checks_all
+                  SET attribute4 = c1.utr_no,
+                      attribute5 = trunc(sysdate),
+                      last_updated_by = g_user_id,
+                      last_update_date = g_sysdate,
+                      last_update_login = g_login_id
+                WHERE check_id = l_check_id;
+            END IF;
+
+            IF SQL%FOUND
+            THEN
+               l_success_count := l_success_count + 1;
+
+               UPDATE xxindus_hdfc_reverse_stg_new
+                  SET erp_update_status = 'Y'
+                WHERE rowid =c1.rowid;
+
+               fnd_file.put_line
+                  (fnd_file.LOG,
+                      'AP Checks All Attribute4 is update with enet Generated Reference No/UTR Number: '
+                   || c1.cheque_number
+                   || ' and Amount: '
+                   || c1.instrument_amount
+                  );
+				  DBMS_OUTPUT.PUT_LINE(                      'AP Checks All Attribute4 is update with enet Generated Reference No/UTR Number: '
+                   || c1.cheque_number
+                   || ' and Amount: '
+                   || c1.instrument_amount);
+            ELSE
+               l_success_err_count := l_success_err_count + 1;
+
+               UPDATE xxindus_hdfc_reverse_stg_new
+                  SET erp_update_status = 'E'
+                WHERE rowid =c1.rowid;
+
+               fnd_file.put_line
+                  (fnd_file.LOG,
+                      'Error occurred while updating AP Checks All Attribute4 for UTR Number: '
+                   || c1.cheque_number
+                   || ' and Amount: '
+                   || c1.instrument_amount
+                  );
+				  DBMS_OUTPUT.PUT_LINE( 'Error occurred while updating AP Checks All Attribute4 for UTR Number: '
+                   || c1.cheque_number
+                   || ' and Amount: '
+                   || c1.instrument_amount);
+            END IF;
+         ELSE
+          UPDATE ap_checks_all
+          SET attribute3 = 'N',
+          last_updated_by = g_user_id,
+          last_update_date = g_sysdate,
+          last_update_login = g_login_id
+          WHERE check_id IN (
+          SELECT aca.check_id
+          FROM ap_checks_all aca, hr_operating_units hou,apps.ap_suppliers asu
+          WHERE 1 = 1
+          AND aca.org_id = hou.organization_id
+          AND aca.check_number = c1.cheque_number
+		  AND aca.vendor_id = asu.vendor_id
+            -- AND hou.organization_id =l_org_id
+			and asu.segment1=c1.vendor_no   -----------21/11/2018
+             AND aca.amount = c1.instrument_amount
+			
+			 );
+
+            IF SQL%FOUND
+            THEN
+               l_fail_count := l_fail_count + 1;
+
+               UPDATE xxindus_hdfc_reverse_stg_new
+                  SET erp_update_status = 'Y'
+                WHERE rowid =c1.rowid;
+
+               fnd_file.put_line
+                           (fnd_file.LOG,
+                               'AP Checks All Attribute3 is update with N:: '
+                            || c1.cheque_number
+                            || ' and Amount: '
+                            || c1.instrument_amount
+                           );
+						    DBMS_OUTPUT.PUT_LINE( 'AP Checks All Attribute3 is update with N:: '
+                            || c1.cheque_number
+                            || ' and Amount: '
+                            || c1.instrument_amount);
+            ELSE
+               l_fail_err_count := l_fail_err_count + 1;
+
+               UPDATE xxindus_hdfc_reverse_stg_new
+                  SET erp_update_status = 'E'
+                WHERE rowid =c1.rowid;
+
+               fnd_file.put_line
+                  (fnd_file.LOG,
+                      'Error occurred while updating AP Checks All Attribute3 to N for Check: '
+                   || c1.cheque_number
+                   || ' and Amount: '
+                   || c1.instrument_amount
+                  );
+				  DBMS_OUTPUT.PUT_LINE('Error occurred while updating AP Checks All Attribute3 to N for Check: '
+                   || c1.cheque_number
+                   || ' and Amount: '
+                   || c1.instrument_amount);
+            END IF;
+         END IF;
+      END LOOP;
+
+      IF x_retcode = 2
+      THEN
+         ROLLBACK;
+      ELSE
+         COMMIT;
+         l_total_count := l_success_count + l_fail_count;
+         l_total_err_count := l_success_err_count + l_fail_err_count;
+         fnd_file.put_line (fnd_file.LOG, '');
+         fnd_file.put_line (fnd_file.LOG, '');
+         fnd_file.put_line (fnd_file.LOG,
+                               'Total Number of payments loaded for updation: '
+                            || l_total_count
+                           );
+						   
+         fnd_file.put_line (fnd_file.LOG,
+                               'Total Number of records in error: '
+                            || l_total_err_count
+                           );
+          DBMS_OUTPUT.PUT_LINE( 'Total Number of records in error: '
+                            || l_total_err_count
+							);
+         fnd_file.put_line (fnd_file.LOG,
+                               'Total Number of payments updated as Y: '
+                            || l_success_count
+                           );
+		 DBMS_OUTPUT.PUT_LINE( 'Total Number of payments updated as Y: '
+                            || l_success_count
+							);
+         fnd_file.put_line (fnd_file.LOG,
+                               'Total Number of payments updated as N: '
+                            || l_fail_count
+                           );
+          DBMS_OUTPUT.PUT_LINE(  'Total Number of payments updated as N: '
+                            || l_fail_count
+							);
+         fnd_file.put_line (fnd_file.output,
+                               'Total Number of records updated: '
+                            || l_total_count
+                           );
+		DBMS_OUTPUT.PUT_LINE(  'Total Number of records updated: '
+                            || l_total_count
+							);
+         fnd_file.put_line (fnd_file.output,
+                               'Total Number of records in error: '
+                            || l_total_err_count
+                           );
+						   
+         DBMS_OUTPUT.PUT_LINE(  'Total Number of records in error: '
+                            || l_total_err_count
+							);
+         fnd_file.put_line (fnd_file.output,
+                               'Total Number of records updated as Y: '
+                            || l_success_count
+                           );
+						   
+		DBMS_OUTPUT.PUT_LINE(   'Total Number of records updated as Y: '
+                            || l_success_count
+							);
+         fnd_file.put_line (fnd_file.output,
+                               'Total Number of records updated as N: '
+                            || l_fail_count
+                           );
+						   
+	   DBMS_OUTPUT.PUT_LINE(  'Total Number of records updated as N: '
+                            || l_fail_count
+							);
+      END IF;
+   EXCEPTION
+      WHEN OTHERS
+      THEN
+         l_err_msg := 'Error occured in HDFC reverse process   ' || SQLERRM;
+         fnd_file.put_line (fnd_file.LOG, l_err_msg);
+         x_errbuf := l_err_msg;
+         x_retcode := 2;
+   END main_proc;
+BEGIN
+main_proc(x_errbuf,x_retcode);
+END;
